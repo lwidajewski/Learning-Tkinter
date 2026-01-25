@@ -124,7 +124,7 @@ lblScreen = createLabel("What is your average screen time per day?", 10)
 screenBox = createBox(11)
 
 # add in listbox for importance ranking of habits -- https://tkdocs.com/tutorial/morewidgets.html
-lblImportance = createLabel("Rank the importance of the following habits to you:", 12)
+lblImportance = createLabel("Rank the importance of the following habits to you: !!change this text!!", 12)
 
 listHabits = ["Sleep", "Studying", "Exercise", "Screen Time"]
 listvar = tk.StringVar(value=listHabits)
