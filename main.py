@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from scrollbar import Scrollbar
+from moveableListbox import moveItems
 
 
 # INITIAL WINDOW CREATION
@@ -131,13 +132,21 @@ listvar = tk.StringVar(value=listHabits)
 
 listBox = tk.Listbox(frmContent, height=10, width=50, selectmode="single", 
                      disabledforeground="gray", font=("Segoe UI", 12), 
-                     listvariable=listvar)
+                     listvariable=listvar, activestyle="none")
 listBox.grid(column=0, row=13, sticky="w", pady=15)
+
+# move up button
+upBtn = tk.Button(frmContent, text="Move Up", cursor="hand2", command=lambda: moveItems.moveUp(listBox))
+upBtn.grid(column=0, row=14, sticky="w", pady=15)
+
+# move down button
+downBtn = tk.Button(frmContent, text="Move Down", cursor="hand2", command=lambda: moveItems.moveDown(listBox))
+downBtn.grid(column=0, row=14, sticky="w", padx=75)
 
 
 # SUBMIT BUTTON
 submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2")
-submitBtn.grid(column=0, row=14, sticky="w", pady=15)
+submitBtn.grid(column=0, row=15, sticky="w", pady=15)
 
 
 # makes sure application keeps running until closed or stopped
