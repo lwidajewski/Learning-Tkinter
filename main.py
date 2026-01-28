@@ -100,7 +100,10 @@ def createLabel(text, i):
 def createBox(i):
     box = ttk.Entry(frmContent, width=50)
     # placeholder text
-    box.insert(0, "0")
+    if (i > 1):
+        box.insert(0, "0")
+    else:
+        box.insert(0, "John Doe")
 
     # gets called once for each box
     def clearBoxPlaceholder(event):
