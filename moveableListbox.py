@@ -10,6 +10,7 @@ class moveItems:
             for pos in index:
                 # check if they are at the top of the listbox
                 if pos == 0:
+                    # could use return here since I am using a single selection listBox, but this keeps it open for multi-selection
                     continue
                 # get the text associated with where they are at
                 text = listBox.get(pos)
@@ -32,6 +33,7 @@ class moveItems:
             for pos in index:
                 # check if they are at the bottom
                 if pos == lastIndex:
+                    # could use return here since I am using a single selection listBox, but this keeps it open for multi-selection
                     continue
                 # get the text associated with where they are
                 text = listBox.get(pos)

@@ -47,6 +47,7 @@ canvas.bind_all("<MouseWheel>", bar.mouseScroll)
 
 
 # NAVBAR
+
 # navbar background color
 navBlue = "#0d6dfa"
 
@@ -70,6 +71,7 @@ for btnName in navButtons:
 
 
 # PAGE CONTENT
+
 # create page title frame
 pageTitle = tk.Frame(secFrame, background="white", pady=25)
 pageTitle.pack(fill="both")
@@ -97,6 +99,16 @@ def createLabel(text, i):
 # create box and put on grid from the location given
 def createBox(i):
     box = ttk.Entry(frmContent, width=50)
+    # placeholder text
+    box.insert(0, "0")
+
+    # gets called once for each box
+    def clearBoxPlaceholder(event):
+        if box.get() == "0":
+            box.delete(0, tk.END)
+
+    # clear placeholder inside box when box is clicked
+    box.bind("<FocusIn>", clearBoxPlaceholder)
     box.grid(column=0, row=i, sticky="w")
     return box
 
@@ -144,8 +156,34 @@ downBtn = tk.Button(frmContent, text="Move Down", cursor="hand2", command=lambda
 downBtn.grid(column=0, row=14, sticky="w", padx=75)
 
 
-# SUBMIT BUTTON
-submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2")
+# SUBMIT BUTTON functionality
+
+# call this function to call the other two functions below, easier to debug
+def getContent(entries, lb):
+    getText(entries)
+    getListBox(lb)
+
+# gets the text from all the entry boxes
+def getText(entries):
+    for key, entry in entries.items():
+        print(key + ": " + entry.get())
+        entry.delete(0, tk.END)
+
+# gets everything listed in the listbox
+def getListBox(lb):
+    values = lb.get(0, tk.END)
+    print(values)
+
+# https://www.w3schools.com/python/python_dictionaries.asp --> dictionaries
+entryBoxes = {
+        "Name": nameBox, 
+        "Sleep": sleepBox, 
+        "Credits": creditBox, 
+        "Study": studyBox, 
+        "Exercise": exerciseBox, 
+        "Screen": screenBox
+    }
+submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", command=lambda: getContent(entryBoxes, listBox))
 submitBtn.grid(column=0, row=15, sticky="w", pady=15)
 
 
