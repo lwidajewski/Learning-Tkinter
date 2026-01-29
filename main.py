@@ -161,10 +161,32 @@ downBtn.grid(column=0, row=14, sticky="w", padx=75)
 
 # SUBMIT BUTTON functionality
 
-# call this function to call the other two functions below, easier to debug
-def getContent(entries, lb):
+# call this function to call the other functions below, easier to debug and add more functionality to a single button
+def submit(entries, lb):
+    # get input from user
     getText(entries)
     getListBox(lb)
+    # open a new window to display output from eventual AI
+    openNewWindow()
+
+def openNewWindow():
+    root.withdraw() # hide the root window for now
+
+    # create a new window
+    top = tk.Toplevel()
+    top.state("zoomed")
+    top.title("Output Window")
+    # placeholder label for now
+    lblOutput = ttk.Label(top, text="Hello World!", font=("Segoe UI", 12))
+    lblOutput.pack(side="top")
+
+    def closeTop():
+        top.destroy()
+        root.deiconify()
+        root.state("zoomed")
+
+    btnClose = tk.Button(top, text="Close", cursor="hand2", command=closeTop)
+    btnClose.pack(side="top")
 
 # gets the text from all the entry boxes
 def getText(entries):
@@ -186,7 +208,7 @@ entryBoxes = {
         "Exercise": exerciseBox, 
         "Screen": screenBox
     }
-submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", command=lambda: getContent(entryBoxes, listBox))
+submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", command=lambda: submit(entryBoxes, listBox))
 submitBtn.grid(column=0, row=15, sticky="w", pady=15)
 
 
