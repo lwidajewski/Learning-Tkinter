@@ -4,9 +4,12 @@ import tkinter.ttk as ttk
 
 from scrollbar import Scrollbar
 from moveableListbox import moveItems
+from navbar import navbarCreation
 
 
+# ----------------------------------
 # INITIAL WINDOW CREATION
+# ----------------------------------
 root = tk.Tk() # intialize class, create new root window
 
 root.title("Habits Tracker") # change titlebar of window
@@ -14,69 +17,26 @@ root.title("Habits Tracker") # change titlebar of window
 root.state("zoomed") # full screen the window
 
 
+# ----------------------------------
 # SCROLLBAR
-
-# frame one
-firstFrame = tk.Frame(root)
-firstFrame.pack(fill="both", expand=True)
-
-# canvas creation --> you can put scrollbars on a canvas
-canvas = tk.Canvas(firstFrame)
-canvas.pack(side="left", fill="both", expand=True)
-
-# actual scrollbar creation
-scrollbar = ttk.Scrollbar(firstFrame, orient="vertical", command=canvas.yview)
-scrollbar.pack(side="right", fill="y")
-
-# configure canvas
-canvas.configure(yscrollcommand=scrollbar.set)
-
-# create frame inside canvas
-secFrame = tk.Frame(canvas)
-
-# add frame to a window inside canvas
-canvasWindow = canvas.create_window((0, 0), window=secFrame, anchor="nw")
-
-# create instance of scrollbar
-bar = Scrollbar(canvas, canvasWindow)
-
-# bindings
-canvas.bind("<Configure>", bar.configureCanvas)
-secFrame.bind("<Configure>", bar.configureFrame)
-canvas.bind_all("<MouseWheel>", bar.mouseScroll)
+# ----------------------------------
+secFrame = Scrollbar.scrollBar(root)
 
 
+# ----------------------------------
 # NAVBAR
-
-# navbar background color
-navBlue = "#0d6dfa"
-
-# navbar creation, color, and position
-navBar = tk.Frame(secFrame, background=navBlue, height=50)
-navBar.pack(side="top", fill="x")
-
-# before buttons add habit tracker title -- https://tkdocs.com/widgets/label.html --> labels
-companyTitle = tk.Label(navBar, text="Habits Tracker", background=navBlue, fg="white", font=("Segoe UI", 16), padx=15, pady=10)
-companyTitle.pack(side="left")
-
-# navbar buttons -- https://tkdocs.com/widgets/button.html --> buttons
-navButtons = ["Home", "Input Data", "View Goals", "Great Tips"]
-for btnName in navButtons:
-    newBtn = tk.Button(navBar, text=btnName, bg=navBlue, fg="white", font=("Segoe UI", 12), padx=15, pady=10, 
-                       relief="flat", activebackground=navBlue, activeforeground="white", cursor="hand2")
-    newBtn.pack(side="left")
-    # when mouse enters and leaves buttons make text certain color
-    newBtn.bind("<Enter>", lambda event: event.widget.config(fg="#c2dbfe"))
-    newBtn.bind("<Leave>", lambda event: event.widget.config(fg="white"))
+# ----------------------------------
+navbarCreation(secFrame)
 
 
+# ----------------------------------
 # PAGE CONTENT
-
+# ----------------------------------
 # create page title frame
 pageTitle = tk.Frame(secFrame, background="white", pady=25)
 pageTitle.pack(fill="both")
 
-# create title from input data page
+# create title from the input data page in ITI-200
 labelTitle = ttk.Label(pageTitle, text="Tell Us About Your Habits", font=("Segoe UI", 32, "bold"), background="white")
 labelTitle.pack(side="top")
 
@@ -159,20 +119,24 @@ downBtn = tk.Button(frmContent, text="Move Down", cursor="hand2", command=lambda
 downBtn.grid(column=0, row=14, sticky="w", padx=75)
 
 
-# SUBMIT BUTTON functionality
-
+# ----------------------------------
+# SUBMIT BUTTON
+# ----------------------------------
 # call this function to call the other functions below, easier to debug and add more functionality to a single button
 def submit(entries, lb):
     # get input from user
     getText(entries)
     getListBox(lb)
-    # open a new window to display output from eventual AI
+    # open a new window to display output from eventual AI -- pass in the values you got earlier
     openNewWindow()
 
 def openNewWindow():
-    root.withdraw() # hide the root window for now
+    root.withdraw() # hide the root window for now --> destroying it would break the program
+    #root.destroy()
 
-    # create a new window
+    # create a new window 
+    # https://www.youtube.com/watch?v=qC3FYdpJI5Y
+    # https://www.tutorialspoint.com/how-to-open-a-new-window-by-the-user-pressing-a-button-in-a-tkinter-gui
     top = tk.Toplevel()
     top.state("zoomed")
     top.title("Output Window")
@@ -192,7 +156,7 @@ def openNewWindow():
 def getText(entries):
     for key, entry in entries.items():
         print(key + ": " + entry.get())
-        entry.delete(0, tk.END)
+        #entry.delete(0, tk.END) # clear values in entryboxes?
 
 # gets everything listed in the listbox
 def getListBox(lb):
