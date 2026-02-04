@@ -1,6 +1,7 @@
 # IMPORTS
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import messagebox
 
 from scrollbar import Scrollbar
 from moveableListbox import moveItems
@@ -125,8 +126,11 @@ downBtn.grid(column=0, row=14, sticky="w", padx=75)
 # call this function to call the other functions below, easier to debug and add more functionality to a single button
 def submit(entries, lb):
     # get input from user
-    getText(entries)
-    getListBox(lb)
+    data = getText(entries)
+    if not inputValidation(data):
+        return
+    print(data)
+    listData = getListBox(lb)
     # open a new window to display output from eventual AI -- pass in the values you got earlier
     openNewWindow()
 
@@ -152,16 +156,47 @@ def openNewWindow():
     btnClose = tk.Button(top, text="Close", cursor="hand2", command=closeTop)
     btnClose.pack(side="top")
 
+# display popup error message
+def errorMessage(message):
+    messagebox.showerror(title="Input Error", message=message)
+    return
+
+def inputValidation(data):
+    # check if name is empty
+    if not data["Name"]:
+        errorMessage("Name cannot be empty")
+        return False
+
+    for key in ["Sleep", "Credits", "Study", "Exercise", "Screen"]:
+        # check if other entryboxes are empty
+        if not data[key]:
+            errorMessage(f"{key} cannot be empty")
+            return False
+        try:
+            # check if inputted value is a number
+            value = float(data[key]) # this goes to the except if it can't convert to float
+            # check if values inputted is negative
+            if value < 0:
+                errorMessage(f"{key} cannot be negative")
+                return False
+        except ValueError:
+            errorMessage(f"{key} must be a number")
+            return False
+    return True
+
 # gets the text from all the entry boxes
 def getText(entries):
+    data = {} # create new dictionary to put values in
     for key, entry in entries.items():
-        print(key + ": " + entry.get())
-        #entry.delete(0, tk.END) # clear values in entryboxes?
+        # get values stripping whitespace
+        data[key] = entry.get().strip()
+    return data
 
 # gets everything listed in the listbox
 def getListBox(lb):
+    # from start to end
     values = lb.get(0, tk.END)
-    print(values)
+    print(values) # print to make sure it came through correctly
 
 # https://www.w3schools.com/python/python_dictionaries.asp --> dictionaries
 entryBoxes = {
