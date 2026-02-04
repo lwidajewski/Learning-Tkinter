@@ -123,6 +123,19 @@ downBtn.grid(column=0, row=14, sticky="w", padx=75)
 # ----------------------------------
 # SUBMIT BUTTON
 # ----------------------------------
+# https://www.w3schools.com/python/python_dictionaries.asp --> dictionaries
+entryBoxes = {
+        "Name": nameBox, 
+        "Sleep": sleepBox, 
+        "Credits": creditBox, 
+        "Study": studyBox, 
+        "Exercise": exerciseBox, 
+        "Screen": screenBox
+    }
+submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", command=lambda: submit(entryBoxes, listBox))
+submitBtn.grid(column=0, row=15, sticky="w", pady=15)
+
+
 # call this function to call the other functions below, easier to debug and add more functionality to a single button
 def submit(entries, lb):
     # get input from user
@@ -134,33 +147,35 @@ def submit(entries, lb):
     # open a new window to display output from eventual AI -- pass in the values you got earlier
     openNewWindow()
 
-def openNewWindow():
-    root.withdraw() # hide the root window for now --> destroying it would break the program
-    #root.destroy()
 
-    # create a new window 
-    # https://www.youtube.com/watch?v=qC3FYdpJI5Y
-    # https://www.tutorialspoint.com/how-to-open-a-new-window-by-the-user-pressing-a-button-in-a-tkinter-gui
-    top = tk.Toplevel()
-    top.state("zoomed")
-    top.title("Output Window")
-    # placeholder label for now
-    lblOutput = ttk.Label(top, text="Hello World!", font=("Segoe UI", 12))
-    lblOutput.pack(side="top")
+# ----------------------------------
+# Functions to Get data from Entry Boxes and Listbox
+# ----------------------------------
+# gets the text from all the entry boxes
+def getText(entries):
+    data = {} # create new dictionary to put values in
+    for key, entry in entries.items():
+        # get values stripping whitespace
+        data[key] = entry.get().strip()
+    return data
 
-    def closeTop():
-        top.destroy()
-        root.deiconify()
-        root.state("zoomed")
+# gets everything listed in the listbox
+def getListBox(lb):
+    # from start to end
+    values = lb.get(0, tk.END)
+    print(values) # print to make sure it came through correctly
 
-    btnClose = tk.Button(top, text="Close", cursor="hand2", command=closeTop)
-    btnClose.pack(side="top")
-
-# display popup error message
+# ----------------------------------
+# Error message function
+# ----------------------------------
+# display popup error message --> https://docs.python.org/3/library/tkinter.messagebox.html#messagebox-icons
 def errorMessage(message):
     messagebox.showerror(title="Input Error", message=message)
     return
 
+# ----------------------------------
+# Function to validate input
+# ----------------------------------
 def inputValidation(data):
     # check if name is empty
     if not data["Name"]:
@@ -184,31 +199,30 @@ def inputValidation(data):
             return False
     return True
 
-# gets the text from all the entry boxes
-def getText(entries):
-    data = {} # create new dictionary to put values in
-    for key, entry in entries.items():
-        # get values stripping whitespace
-        data[key] = entry.get().strip()
-    return data
+# ----------------------------------
+# Opens a new window on submit button click if input is correct
+# ----------------------------------
+def openNewWindow():
+    root.withdraw() # hide the root window for now --> destroying it would break the program
+    #root.destroy()
 
-# gets everything listed in the listbox
-def getListBox(lb):
-    # from start to end
-    values = lb.get(0, tk.END)
-    print(values) # print to make sure it came through correctly
+    # create a new window 
+    # https://www.youtube.com/watch?v=qC3FYdpJI5Y
+    # https://www.tutorialspoint.com/how-to-open-a-new-window-by-the-user-pressing-a-button-in-a-tkinter-gui
+    top = tk.Toplevel()
+    top.state("zoomed")
+    top.title("Output Window")
+    # placeholder label for now
+    lblOutput = ttk.Label(top, text="Hello World!", font=("Segoe UI", 12))
+    lblOutput.pack(side="top")
 
-# https://www.w3schools.com/python/python_dictionaries.asp --> dictionaries
-entryBoxes = {
-        "Name": nameBox, 
-        "Sleep": sleepBox, 
-        "Credits": creditBox, 
-        "Study": studyBox, 
-        "Exercise": exerciseBox, 
-        "Screen": screenBox
-    }
-submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", command=lambda: submit(entryBoxes, listBox))
-submitBtn.grid(column=0, row=15, sticky="w", pady=15)
+    def closeTop():
+        top.destroy()
+        root.deiconify()
+        root.state("zoomed")
+
+    btnClose = tk.Button(top, text="Close", cursor="hand2", command=closeTop)
+    btnClose.pack(side="top")
 
 
 # makes sure application keeps running until closed or stopped
