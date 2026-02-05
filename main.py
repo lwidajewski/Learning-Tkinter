@@ -77,7 +77,7 @@ def createBox(i):
     return box
 
 # name
-lblName = createLabel("What is your name", 0)
+lblName = createLabel("What is your name?", 0)
 nameBox = createBox(1)
 
 # sleep
