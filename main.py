@@ -64,11 +64,11 @@ def createBox(i):
     if (i > 1):
         box.insert(0, "0")
     else:
-        box.insert(0, "John Doe")
+        box.insert(0, "[John Doe]")
 
     # gets called once for each box
     def clearBoxPlaceholder(event):
-        if box.get() == "0":
+        if (box.get() == "0" or box.get() == "[John Doe]"):
             box.delete(0, tk.END)
 
     # clear placeholder inside box when box is clicked
