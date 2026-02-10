@@ -1,0 +1,5 @@
+better placeholders --> https://pythonexamples.org/python-tkinter-entry-placeholder
+dialog boxes --> https://docs.python.org/3/library/dialog.html
+AI implemented
+
+Thursday 19th 4-5pm

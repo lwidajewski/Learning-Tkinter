@@ -59,20 +59,35 @@ def createLabel(text, i):
 
 # create box and put on grid from the location given
 def createBox(i):
-    box = ttk.Entry(frmContent, width=50)
+    box = tk.Entry(frmContent, width=50)
     # placeholder text
-    if (i > 1):
-        box.insert(0, "[0]")
+    if (i == 1):
+        placeholder = "Enter your name..."
     else:
-        box.insert(0, "[John Doe]")
+        placeholder = "Enter your hours..."
 
-    # gets called once for each box
-    def clearBoxPlaceholder(event):
-        if (box.get() == "[0]" or box.get() == "[John Doe]"):
-            box.delete(0, tk.END)
+    def addPlaceholder(placeholder):
+        if (box.get() == ""):
+            box.insert(0, placeholder)
+            box.configure(foreground="gray")
 
-    # clear placeholder inside box when box is clicked
-    box.bind("<FocusIn>", clearBoxPlaceholder)
+    def onEntryFocusIn(event): 
+        if (box.cget("fg") == "gray"): 
+            box.delete(0, tk.END) 
+            # whatever the user types will be black
+            box.configure(foreground="black")
+
+    # on click out of box
+    def onExitFocusOut(event):
+        addPlaceholder(placeholder)
+
+    # add initial placeholders
+    addPlaceholder(placeholder)
+
+    # bind boxes adding additional functionality to entryboxes
+    box.bind("<FocusIn>", onEntryFocusIn)
+    box.bind("<FocusOut>", onExitFocusOut)
+    # place box on correct row
     box.grid(column=0, row=i, sticky="w")
     return box
 
@@ -171,7 +186,6 @@ def getListBox(lb):
 # display popup error message --> https://docs.python.org/3/library/tkinter.messagebox.html#messagebox-icons
 def errorMessage(message):
     messagebox.showerror(title="Input Error", message=message)
-    return
 
 # ----------------------------------
 # Function to validate input
