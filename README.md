@@ -1,9 +1,14 @@
-Make sure to pull the model from Ollama before running.
+# Independent Study - Learning Tkinter
+Leo Widajewski
 
+## Setup / Prerequisites
+Pulling the specific ollama model to your machine
 "ollama pull aryanvala/hushiyar-lite"
 
-Additionally, run "pip install -r requirements.txt" to install the ollama library
+Running "pip install -r requirements.txt" to install the ollama library
 
-You can't use code runner for this project, you have to run the python file in a terminal.
+## How to Run Program
+You can't use code runner for this project, you have to run the 'main.py' file in a terminal.
 
-This README.md file is not formatted at all yet, will update later.
+## Additional Notes
+This is an independent study and the code is by no means optimized/organized well. This was a learning experience for me (Leo).
