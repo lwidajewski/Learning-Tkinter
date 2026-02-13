@@ -6,6 +6,7 @@ from tkinter import messagebox
 from scrollbar import Scrollbar
 from moveableListbox import moveItems
 from navbar import navbarCreation
+from ollamaResponse import Response_Ollama
 
 
 # ----------------------------------
@@ -157,8 +158,12 @@ def submit(entries, lb):
     data = getText(entries)
     if not inputValidation(data):
         return
-    print(data)
     listData = getListBox(lb)
+
+
+    prompt = Response_Ollama.buildingPrompt(data, listData)
+    response = Response_Ollama.modelResponse(prompt)
+
     # open a new window to display output from eventual AI -- pass in the values you got earlier
     openNewWindow()
 
@@ -178,7 +183,13 @@ def getText(entries):
 def getListBox(lb):
     # from start to end
     values = lb.get(0, tk.END)
-    print(values) # print to make sure it came through correctly
+
+    # convert to list then to dictionary for prompting the AI model later
+    valuesList = list(values)
+    valuesDict = {index: item for index, item in enumerate(valuesList)}
+
+    #print(valuesDict) # print to make sure it came through correctly
+    return valuesDict
 
 # ----------------------------------
 # Error message function
