@@ -128,11 +128,11 @@ listBox = tk.Listbox(frmContent, height=10, width=50, selectmode="single",
 listBox.grid(column=0, row=13, sticky="w", pady=15)
 
 # move up button
-upBtn = tk.Button(frmContent, text="Move Up", cursor="hand2", command=lambda: moveItems.moveUp(listBox))
+upBtn = tk.Button(frmContent, text="Move Up", cursor="hand2", background="#0d6dfa", foreground="white", relief="groove", command=lambda: moveItems.moveUp(listBox))
 upBtn.grid(column=0, row=14, sticky="w", pady=15)
 
 # move down button
-downBtn = tk.Button(frmContent, text="Move Down", cursor="hand2", command=lambda: moveItems.moveDown(listBox))
+downBtn = tk.Button(frmContent, text="Move Down", cursor="hand2", background="#0d6dfa", foreground="white", relief="groove", command=lambda: moveItems.moveDown(listBox))
 downBtn.grid(column=0, row=14, sticky="w", padx=75)
 
 
@@ -148,7 +148,7 @@ entryBoxes = {
         "Exercise": exerciseBox, 
         "Screen": screenBox
     }
-submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", command=lambda: submit(entryBoxes, listBox))
+submitBtn = tk.Button(frmContent, text="Submit", cursor="hand2", background="green", foreground="white", relief="solid", command=lambda: submit(entryBoxes, listBox))
 submitBtn.grid(column=0, row=15, sticky="w", pady=15)
 
 
@@ -160,16 +160,12 @@ def submit(entryBoxes, lb):
         return
     listData = getListBox(lb)
 
-
+    # buid prompt and get response from AI
     prompt = Response_Ollama.buildingPrompt(data, listData)
     response = Response_Ollama.modelResponse(prompt)
 
-    # should we put the response in a dialog box???
-    # or just put it into the new window???
-
-
-    # open a new window to display output from eventual AI -- pass in the values you got earlier
-    openNewWindow()
+    # open a new window to display output from AI -- pass in the values you got earlier
+    openNewWindow(response)
 
 
 # ----------------------------------
@@ -235,27 +231,35 @@ def inputValidation(data, entryBoxes):
 # ----------------------------------
 # Opens a new window on submit button click if input is correct
 # ----------------------------------
-def openNewWindow():
+def openNewWindow(response):
     root.withdraw() # hide the root window for now --> destroying it would break the program
-    #root.destroy()
 
     # create a new window 
     # https://www.youtube.com/watch?v=qC3FYdpJI5Y
     # https://www.tutorialspoint.com/how-to-open-a-new-window-by-the-user-pressing-a-button-in-a-tkinter-gui
-    top = tk.Toplevel()
+    top = tk.Toplevel(root)
     top.state("zoomed")
     top.title("Output Window")
-    # placeholder label for now
-    lblOutput = ttk.Label(top, text="Hello World!", font=("Segoe UI", 12))
-    lblOutput.pack(side="top")
+
+    # contains the button and label for AI output
+    contentFrame = ttk.Frame(top, padding=10)
+    contentFrame.pack(expand=True)
+
+    # label that has AI output
+    lblOutput = ttk.Label(contentFrame, text=response, font=("Segoe UI", 12), wraplength=1000, justify="left")
+    lblOutput.grid(column=0, row=0, sticky="w", pady=15)
 
     def closeTop():
         top.destroy()
         root.deiconify()
         root.state("zoomed")
 
-    btnClose = tk.Button(top, text="Close", cursor="hand2", command=closeTop)
-    btnClose.pack(side="top")
+    # activated when the user clicks the 'x' in the top-right corner, closes the window like normal instead of program termination
+    top.protocol("WM_DELETE_WINDOW", closeTop)
+
+    # closes the 'top' window
+    btnClose = tk.Button(contentFrame, text="Close", cursor="hand2", background="#0d6dfa", foreground="white", command=closeTop)
+    btnClose.grid(column=0, row=1, sticky="w", pady=15)
 
 
 # makes sure application keeps running until closed or stopped
