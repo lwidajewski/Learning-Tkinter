@@ -97,7 +97,7 @@ lblName = createLabel("What is your name?", 0)
 nameBox = createBox(1)
 
 # sleep
-lblSleep = createLabel("How much sleep do you get each night?", 2)
+lblSleep = createLabel("How many hours of sleep do you get each night?", 2)
 sleepBox = createBox(3)
 
 # credit hours
@@ -153,16 +153,20 @@ submitBtn.grid(column=0, row=15, sticky="w", pady=15)
 
 
 # call this function to call the other functions below, easier to debug and add more functionality to a single button
-def submit(entries, lb):
+def submit(entryBoxes, lb):
     # get input from user
-    data = getText(entries)
-    if not inputValidation(data):
+    data = getText(entryBoxes)
+    if not inputValidation(data, entryBoxes):
         return
     listData = getListBox(lb)
 
 
     prompt = Response_Ollama.buildingPrompt(data, listData)
     response = Response_Ollama.modelResponse(prompt)
+
+    # should we put the response in a dialog box???
+    # or just put it into the new window???
+
 
     # open a new window to display output from eventual AI -- pass in the values you got earlier
     openNewWindow()
@@ -201,16 +205,18 @@ def errorMessage(message):
 # ----------------------------------
 # Function to validate input
 # ----------------------------------
-def inputValidation(data):
+def inputValidation(data, entryBoxes):
     # check if name is empty
     if not data["Name"]:
         errorMessage("Name cannot be empty")
+        entryBoxes["Name"].focus()
         return False
 
     for key in ["Sleep", "Credits", "Study", "Exercise", "Screen"]:
         # check if other entryboxes are empty
         if not data[key]:
             errorMessage(f"{key} cannot be empty")
+            entryBoxes[key].focus()
             return False
         try:
             # check if inputted value is a number
@@ -218,9 +224,11 @@ def inputValidation(data):
             # check if values inputted is negative
             if value < 0:
                 errorMessage(f"{key} cannot be negative")
+                entryBoxes[key].focus()
                 return False
         except ValueError:
             errorMessage(f"{key} must be a number")
+            entryBoxes[key].focus()
             return False
     return True
 
