@@ -164,6 +164,20 @@ def submit(entryBoxes, lb):
     prompt = Response_Ollama.buildingPrompt(data, listData)
     response = Response_Ollama.modelResponse(prompt)
 
+    # clear entryboxes
+    # loop through and delete
+    for box in entryBoxes.values():
+        box.delete(0, tk.END)
+        # recalls the event so it can put the placeholders back
+        box.event_generate("<FocusOut>")
+
+    # reset listbox
+    # delete all elements
+    lb.delete(0, tk.END)
+    # add original elements back in
+    for item in listHabits:
+        lb.insert(tk.END, item)
+
     # open a new window to display output from AI -- pass in the values you got earlier
     openNewWindow(response)
 
