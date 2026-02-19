@@ -216,8 +216,8 @@ def errorMessage(message):
 # Function to validate input
 # ----------------------------------
 def inputValidation(data, entryBoxes):
-    # check if name is empty
-    if not data["Name"]:
+    # check if name is empty or the placeholder is still there
+    if nameBox.cget("fg") == "gray" or not data["Name"]:
         errorMessage("Name cannot be empty")
         entryBoxes["Name"].focus()
         return False
